@@ -92,17 +92,24 @@ public class RSVP {
         rsvp.setEmail(rs.getString("email"));
         rsvp.setPhone(rs.getString("phone"));
         
-        //if we just use the pattern stored in mySQL, can just use:
-        //rsvp.setConfirmationDate(new DateTime(DateTime.parse(rs.getString("confirmation_date"))));
-        //But we need retrieve date in the manner shown below if we want to set date in a certain pattern:
+        
+        // Alternate method: rsvp.setConfirmationDate(new DateTime(DateTime.parse(rs.getString("confirmation_date"))));
+        
+        //purpose of code below: retrieve the confirmation_date as String then convert it into DateTime
+        //To convert string to DateTime successfully,DateTimeFormat.forPattern() must match 
+        //the pattern of the String of confirm_date which in this case is "yyyy-MM-dd'T'HH:mm".
+
         String confirmationDateStr = rs.getString("confirmation_date");
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm");
         DateTime confirmationDate = formatter.parseDateTime(confirmationDateStr);
         rsvp.setConfirmationDate(confirmationDate);
         rsvp.setComments(rs.getString("comments"));
 
         return rsvp;
     }
+
+    //Since we have parsed the String into a DateTime object in createFromSqlResults(SqlRowSet rs) method, 
+    //we can now use DateTimeFormat.forPattern() to convert it to String in the pattern we desire
 
     public JsonObject toJson() {
         return Json.createObjectBuilder()

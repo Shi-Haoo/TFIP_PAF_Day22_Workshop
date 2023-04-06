@@ -18,5 +18,7 @@ public class RSVPService {
         return repo.getAllRSVP();
     }
 
-    
+    public List<RSVP> getRSVPByName(String name){
+        return repo.getRSVPByName(name);
+    }
 }
