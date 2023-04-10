@@ -1,5 +1,9 @@
 package sg.edu.nus.iss.workshop22.model;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -7,6 +11,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 public class RSVP {
 
@@ -120,6 +125,33 @@ public class RSVP {
                 .add("Confirmation_Date", this.getConfirmationDate().toString(DateTimeFormat.forPattern("dd-MM-yyyy")))
                 .add("comment", this.getComments())
                 .build();
+    }
+
+    public static RSVP createFromJson(String json) throws IOException{
+
+        RSVP rsvp = new RSVP();
+
+        //convert Json String to Json Object
+        try(InputStream is = new ByteArrayInputStream(json.getBytes())){
+            JsonReader reader = Json.createReader(is);
+            JsonObject o = reader.readObject();
+            
+            //set values in Json Object to Java Object
+            rsvp.setName(o.getString("name"));
+            rsvp.setEmail(o.getString("email"));
+            rsvp.setPhone(o.getString("phone"));
+            
+            //convert String in the format of "dd-MM-yyyy" to DateTime Object and 
+            //set it into RSVP confirmationDate
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+            DateTime date = formatter.parseDateTime(o.getString("confirmationDate"));
+            rsvp.setConfirmationDate(date);
+            
+            rsvp.setComments(o.getString("comments"));
+        }
+
+        return rsvp;
+
     }
 
 }

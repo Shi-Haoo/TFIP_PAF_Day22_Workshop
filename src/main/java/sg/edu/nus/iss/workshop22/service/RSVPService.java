@@ -21,4 +21,22 @@ public class RSVPService {
     public List<RSVP> getRSVPByName(String name){
         return repo.getRSVPByName(name);
     }
+
+    public RSVP getRSVPByEmail (String email){
+        return repo.getRSVPByEmail(email);
+    }
+
+    public RSVP upsertRSVP(RSVP rsvp){
+
+        return repo.upsertRSVP(rsvp);
+
+    }
+
+    public RSVP updateByEmail(RSVP rsvp, String email){
+        return repo.updateRSVPByEmail(rsvp, email);
+    }
+
+    public Long getRSVPCount(){
+        return repo.getRSVPCount();
+    }
 }
