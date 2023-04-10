@@ -154,4 +154,11 @@ public class RSVP {
 
     }
 
+    public static DateTime convertToDateTimeFromForm(String date){
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTime confirmationDate = formatter.parseDateTime(date);
+
+        return confirmationDate;
+    }
+
 }

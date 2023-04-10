@@ -3,12 +3,13 @@ package sg.edu.nus.iss.workshop22.controller;
 import java.io.IOException;
 import java.util.List;
 
-
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -81,6 +82,37 @@ public class RSVPRestController {
         //convert Json to Java Object
         RSVP rsvp = RSVP.createFromJson(json);
 
+        //If no existing record is found
+        Boolean recordExists = svc.getRSVPByEmail(rsvp.getEmail())==null ? false : true;
+        System.out.println("isExisting >>>>> " + recordExists);
+
+        RSVP newRSVP = svc.upsertRSVP(rsvp);
+
+        String message = recordExists ? "%s >>>>%s's record is updated".formatted(newRSVP.getId(),newRSVP.getName()) : 
+           "%s >>>>%s's record is inserted".formatted(newRSVP.getId(), newRSVP.getName());
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Json.createObjectBuilder()
+                            .add("Message", message)
+                            .build()
+                            .toString());
+        
+        
+        
+        
+
+    }
+
+
+    @PostMapping(path="/rsvp/form", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    //use @ModelAttribute to retrieve the values in RSVP object which we previously 
+    //added into the model to bind to the form in RSVPController.java
+    public ResponseEntity<String> upsertViaForm(@ModelAttribute RSVP rsvp, @RequestParam String date){
+
+        DateTime confirmationDate = RSVP.convertToDateTimeFromForm(date);
+        rsvp.setConfirmationDate(confirmationDate);
+        
         //If no existing record is found
         Boolean recordExists = svc.getRSVPByEmail(rsvp.getEmail())==null ? false : true;
         System.out.println("isExisting >>>>> " + recordExists);

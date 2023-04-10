@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!--When we click submit, method with appropriate path and under PostMapping
+    in @RestController will handle this post request-->
+
+    <form method="post" data-th-action="@{/api/rsvp/form}" data-th-object="${rsvp}">
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td>
+                    <input type="text" data-th-field="*{name}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Email:</td>
+                <td>
+                    <input type="text" data-th-field="*{email}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Phone Number:</td>
+                <td>
+                    <input type="text" data-th-field="*{phone}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Confirmation Date:</td>
+                <td>
+                    <input type="date" name="date">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Comments:</td>
+                <td>
+                    <textarea data-th-field="*{comments}" cols="30" rows="10"></textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <button type="submit">Submit</button>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+    
+</body>
+</html>
