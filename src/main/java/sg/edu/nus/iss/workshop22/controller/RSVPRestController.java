@@ -108,7 +108,7 @@ public class RSVPRestController {
     @PostMapping(path="/rsvp/form", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     //use @ModelAttribute to retrieve the values in RSVP object which we previously 
     //added into the model to bind to the form in RSVPController.java
-    public ResponseEntity<String> upsertViaForm(@ModelAttribute RSVP rsvp, @RequestParam String date){
+    public ResponseEntity<String> upsertViaForm(@ModelAttribute RSVP rsvp, String date){
 
         DateTime confirmationDate = RSVP.convertToDateTimeFromForm(date);
         rsvp.setConfirmationDate(confirmationDate);
